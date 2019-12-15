@@ -66,10 +66,8 @@ export default {
         this.numbers.pop();
       }
     },
-      /* eslint-disable no-console */
     whileSpin() {
       this.state = "spin";
-      console.log(this.state)
       clearTimeout(this.timeoutId);
       const vue = this;
       this.timeoutId = setTimeout(function() {
@@ -77,7 +75,6 @@ export default {
       }, 350);
     },
     toggleSpin() {
-      console.log(this.state)
       if (this.state == "spin") {
         this.state = "stop";
       } else {
