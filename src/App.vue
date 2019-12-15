@@ -3,13 +3,15 @@
     <div id="header">
       <h1>Welcome to Lets-BBQ App</h1>
       <p>{{message}}</p>
+      <span>mode:</span>
+      <button v-on:click="toggle">{{mode}}</button>
       <p>
         <span>controller:</span>
         <button id="add" v-on:click="addSushi">Add</button>
         <button id="reduce" v-on:click="reduceSushi">Reduce</button>
       </p>
     </div>
-    <ul @wheel="onScroll" v-bind:class="state">
+    <ul v-bind:wheel="onScroll" v-on:click="onClick" v-bind:class="state">
       <li v-for="number in numbers" v-bind:key="number">
         <Meat v-bind:state="state" />
       </li>
@@ -25,8 +27,8 @@ export default {
   data() {
     return {
       state: "stop",
-      message:
-        "Burn the meat with the scroll! The grilled meat is delicious!",
+      mode: "while",
+      message: "Burn the meat with the scroll! The grilled meat is delicious!",
       numbers: [0]
     };
   },
@@ -38,13 +40,22 @@ export default {
   },
   methods: {
     toggle() {
-      if (this.state == "spin") {
-        this.state = "stop";
-        this.message = "oh? were you full of stomach?";
+      if (this.mode == "while") {
+        this.mode = "toggle";
+        this.message = "Burn the meat with the click on mesh!! The grilled meat is delicious!"
       } else {
-        this.state = "spin";
-        this.message =
-          "Japanese Common People Supporter is kaiten-zushi. I expressed gratitude for that kaiten-zushi.";
+        this.mode = "while";
+        this.message = "Burn the meat with the scroll!! The grilled meat is delicious!"
+      }
+    },
+    onScroll() {
+      if (this.mode == "while") {
+        this.whileSpin()
+      }
+    },
+    onClick(){
+      if (this.mode == "toggle") {
+        this.toggleSpin()
       }
     },
     addSushi() {
@@ -55,14 +66,23 @@ export default {
         this.numbers.pop();
       }
     },
-    onScroll() {
       /* eslint-disable no-console */
+    whileSpin() {
       this.state = "spin";
+      console.log(this.state)
       clearTimeout(this.timeoutId);
-      const vue = this
+      const vue = this;
       this.timeoutId = setTimeout(function() {
-        vue.state = "stop"
+        vue.state = "stop";
       }, 350);
+    },
+    toggleSpin() {
+      console.log(this.state)
+      if (this.state == "spin") {
+        this.state = "stop";
+      } else {
+        this.state = "spin";
+      }
     }
   }
 };
@@ -77,8 +97,12 @@ ul {
   background-size: cover;
 }
 
-ul.spin{
-  background-image:url("./assets/mesh.png"), url("./assets/burn.gif");
+ul.spin {
+  background-image: url("./assets/mesh.png"), url("./assets/burn.gif");
+}
+
+Meat {
+  filter: brightness(-127%);
 }
 
 #app {
